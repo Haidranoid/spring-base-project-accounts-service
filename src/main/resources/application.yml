@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: account-service
+  profiles:
+    active: dev
+  #config:
+  #  import: optional:configserver:http://comex-properties-service:8888
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  # enabled-by-default: false
+  #tracing:
+  #  sampling:
+  #    probability: 1.0
+  #  propagation:
+  #    type: b3
+
+
+#logging:
+#  pattern:
+#    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+server:
+  port: 8081
