@@ -3,8 +3,6 @@ spring:
     name: account-service
   profiles:
     active: dev
-  #config:
-  #  import: optional:configserver:http://comex-properties-service:8888
 
 management:
   endpoints:
