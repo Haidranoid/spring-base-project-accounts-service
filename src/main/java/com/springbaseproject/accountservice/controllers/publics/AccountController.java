@@ -16,11 +16,11 @@ import java.util.List;
 
 
 
-@RequestMapping("/api/v1/accounts")
+@Slf4j
 @Tag(name = "Account Controller")
+@RequestMapping("/api/v1/accounts")
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class AccountController {
 
     private final AccountServiceImpl accountService;
