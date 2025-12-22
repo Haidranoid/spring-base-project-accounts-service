@@ -1,8 +1,8 @@
-package com.springbaseproject.accountservice.mappers.impl;
+package com.springbaseproject.accountservice.common.mappers.impl;
 
-import com.springbaseproject.accountservice.dtos.AccountResponseDto;
-import com.springbaseproject.accountservice.dtos.CreateAccountDto;
-import com.springbaseproject.accountservice.mappers.AccountMapper;
+import com.springbaseproject.accountservice.common.dtos.AccountResponseDto;
+import com.springbaseproject.accountservice.common.dtos.CreateAccountDto;
+import com.springbaseproject.accountservice.common.mappers.AccountMapper;
 import com.springbaseproject.sharedstarter.entities.Account;
 import org.springframework.stereotype.Component;
 

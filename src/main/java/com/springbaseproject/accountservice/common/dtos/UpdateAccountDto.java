@@ -1,27 +1,23 @@
-package com.springbaseproject.accountservice.dtos;
+package com.springbaseproject.accountservice.common.dtos;
 
 import com.springbaseproject.sharedstarter.constants.Roles;
-import lombok.Builder;
 import lombok.NonNull;
 
-@Builder
-public record AccountResponseDto(
-        @NonNull Long id,
-        @NonNull String username,
+public record UpdateAccountDto(
         @NonNull String firstName,
         @NonNull String lastName,
         @NonNull String email,
+        @NonNull String password,
         @NonNull Roles role
 ) {
     @NonNull
     @Override
     public String toString() {
-        return "AccountDto{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", firstName='" + firstName + '\'' +
+        return "UpdateAccountDto{" +
+                "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + "[password]" + '\'' +
                 ", role=" + role +
                 '}';
     }

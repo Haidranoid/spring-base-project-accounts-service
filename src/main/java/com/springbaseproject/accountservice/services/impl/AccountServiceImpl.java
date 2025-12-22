@@ -1,7 +1,7 @@
 package com.springbaseproject.accountservice.services.impl;
 
-import com.springbaseproject.accountservice.dtos.*;
-import com.springbaseproject.accountservice.mappers.impl.AccountMapperImpl;
+import com.springbaseproject.accountservice.common.dtos.*;
+import com.springbaseproject.accountservice.common.mappers.impl.AccountMapperImpl;
 import com.springbaseproject.accountservice.repositories.AccountRepository;
 import com.springbaseproject.accountservice.services.AccountService;
 import com.springbaseproject.sharedstarter.entities.Account;

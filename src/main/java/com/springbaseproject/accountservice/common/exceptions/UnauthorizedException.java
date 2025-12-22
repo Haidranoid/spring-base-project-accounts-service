@@ -1,4 +1,4 @@
-package com.springbaseproject.accountservice.exceptions;
+package com.springbaseproject.accountservice.common.exceptions;
 
 import org.springframework.http.HttpStatus;
 

@@ -1,4 +1,4 @@
-package com.springbaseproject.accountservice.dtos;
+package com.springbaseproject.accountservice.common.dtos;
 
 import com.springbaseproject.sharedstarter.constants.Roles;
 import lombok.Builder;
