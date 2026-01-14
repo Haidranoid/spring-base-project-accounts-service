@@ -8,6 +8,6 @@ class AccountServiceApplicationTests {
 
     @Test
     void contextLoads() {
+      //smoke test
     }
-
 }

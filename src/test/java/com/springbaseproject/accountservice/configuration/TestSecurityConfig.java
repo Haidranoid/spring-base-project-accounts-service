@@ -1,4 +1,4 @@
-package com.springbaseproject.accountservice.security;
+package com.springbaseproject.accountservice.configuration;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

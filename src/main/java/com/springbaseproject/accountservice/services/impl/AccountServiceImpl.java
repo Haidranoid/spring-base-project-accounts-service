@@ -8,10 +8,7 @@ import com.springbaseproject.sharedstarter.entities.Account;
 import com.springbaseproject.sharedstarter.utils.SecurityUtils;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,19 +16,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
+
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final AccountMapperImpl accountMapper;
     private final SecurityUtils securityUtils;
 
-    public static final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
-
     @Override
+    @Transactional(readOnly = true)
     public List<AccountResponseDto> findAll() {
         var accountsList = accountRepository.findAll().stream().map(accountMapper::toDto).toList();
 
@@ -76,22 +73,10 @@ public class AccountServiceImpl implements AccountService {
 
 
     public AccountResponseDto authenticateAccount(AuthenticateAccountDto authenticateAccountDto) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            authenticateAccountDto.username(),
-                            authenticateAccountDto.password()
-                    )
-            );
+        var account = accountRepository.findByUsername(authenticateAccountDto.username())
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
 
-            var account = accountRepository.findAccountByUsername(authenticateAccountDto.username())
-                    .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-
-            return accountMapper.toDto(account);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new UsernameNotFoundException(e.getMessage());
-        }
+        return accountMapper.toDto(account);
     }
 
     private void applyUpdates(Account entity, UpdateAccountDto dto) {
