@@ -1,6 +1,5 @@
 package com.springbaseproject.accountservice.integration.flows;
 
-import com.springbaseproject.accountservice.integration.base.AbstractPostgresIT;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

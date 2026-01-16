@@ -1,4 +1,4 @@
-package com.springbaseproject.accountservice.common.mappers;
+package com.springbaseproject.accountservice.mappers;
 
 import com.springbaseproject.accountservice.common.dtos.AccountResponseDto;
 import com.springbaseproject.accountservice.common.dtos.CreateAccountDto;

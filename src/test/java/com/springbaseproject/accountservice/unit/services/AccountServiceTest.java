@@ -1,7 +1,6 @@
 package com.springbaseproject.accountservice.unit.services;
 
-import com.springbaseproject.accountservice.common.mappers.AccountMapper;
-import com.springbaseproject.accountservice.common.mappers.impl.AccountMapperImpl;
+import com.springbaseproject.accountservice.mappers.impl.AccountMapperImpl;
 import com.springbaseproject.accountservice.fixtures.AccountFixtures;
 import com.springbaseproject.accountservice.repositories.AccountRepository;
 import com.springbaseproject.accountservice.services.impl.AccountServiceImpl;
