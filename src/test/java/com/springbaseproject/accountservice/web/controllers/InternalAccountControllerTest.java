@@ -1,4 +1,4 @@
-package com.springbaseproject.accountservice.web.controllers.internals;
+package com.springbaseproject.accountservice.web.controllers;
 
 import com.springbaseproject.accountservice.configuration.TestSecurityConfig;
 import com.springbaseproject.accountservice.controllers.advices.GlobalExceptionHandler;
@@ -6,7 +6,6 @@ import com.springbaseproject.accountservice.controllers.internals.InternalAccoun
 import com.springbaseproject.accountservice.controllers.publics.advices.AccountExceptionHandler;
 import com.springbaseproject.accountservice.fixtures.AccountFixtures;
 import com.springbaseproject.accountservice.services.impl.AccountServiceImpl;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
