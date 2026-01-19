@@ -1,10 +1,11 @@
 package com.springbaseproject.accountservice.services.impl;
 
 import com.springbaseproject.accountservice.common.dtos.*;
+import com.springbaseproject.accountservice.mappers.AccountMapper;
 import com.springbaseproject.accountservice.mappers.impl.AccountMapperImpl;
 import com.springbaseproject.accountservice.repositories.AccountRepository;
 import com.springbaseproject.accountservice.services.AccountService;
-import com.springbaseproject.sharedstarter.entities.Account;
+import com.springbaseproject.sharedstarter.entities.AccountEntity;
 import com.springbaseproject.sharedstarter.utils.SecurityUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AccountMapperImpl accountMapper;
+    private final AccountMapper accountMapper;
     private final SecurityUtils securityUtils;
 
     @Override
@@ -79,7 +80,7 @@ public class AccountServiceImpl implements AccountService {
         return accountMapper.toDto(account);
     }
 
-    private void applyUpdates(Account entity, UpdateAccountDto dto) {
+    private void applyUpdates(AccountEntity entity, UpdateAccountDto dto) {
         if (!dto.password().isBlank()) {
             entity.setPassword(passwordEncoder.encode(dto.password()));
         }

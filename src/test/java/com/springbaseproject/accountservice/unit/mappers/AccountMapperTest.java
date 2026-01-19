@@ -4,7 +4,7 @@ import com.springbaseproject.accountservice.common.dtos.AccountResponseDto;
 import com.springbaseproject.accountservice.mappers.AccountMapper;
 import com.springbaseproject.accountservice.mappers.impl.AccountMapperImpl;
 import com.springbaseproject.sharedstarter.constants.Roles;
-import com.springbaseproject.sharedstarter.entities.Account;
+import com.springbaseproject.sharedstarter.entities.AccountEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,7 +15,7 @@ public class AccountMapperTest {
 
     @Test
     void toDto_shouldMapAllFields() {
-        Account account =  Account.builder()
+        AccountEntity account =  AccountEntity.builder()
                 .id(1L)
                 .username("user@test.com")
                 .email("user@test.com")

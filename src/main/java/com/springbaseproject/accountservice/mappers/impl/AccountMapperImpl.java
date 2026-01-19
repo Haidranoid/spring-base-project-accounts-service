@@ -3,14 +3,14 @@ package com.springbaseproject.accountservice.mappers.impl;
 import com.springbaseproject.accountservice.common.dtos.AccountResponseDto;
 import com.springbaseproject.accountservice.common.dtos.CreateAccountDto;
 import com.springbaseproject.accountservice.mappers.AccountMapper;
-import com.springbaseproject.sharedstarter.entities.Account;
+import com.springbaseproject.sharedstarter.entities.AccountEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccountMapperImpl implements AccountMapper {
     @Override
-    public Account toEntity(CreateAccountDto dto) {
-        return Account.builder()
+    public AccountEntity toEntity(CreateAccountDto dto) {
+        return AccountEntity.builder()
                 .username(dto.username())
                 .firstName(dto.firstName())
                 .lastName(dto.lastName())
@@ -21,7 +21,7 @@ public class AccountMapperImpl implements AccountMapper {
     }
 
     @Override
-    public AccountResponseDto toDto(Account account) {
+    public AccountResponseDto toDto(AccountEntity account) {
         return AccountResponseDto.builder()
                 .id(account.getId())
                 .username(account.getUsername())

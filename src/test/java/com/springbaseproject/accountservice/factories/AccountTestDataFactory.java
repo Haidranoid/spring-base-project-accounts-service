@@ -1,15 +1,15 @@
 package com.springbaseproject.accountservice.factories;
 
 import com.springbaseproject.sharedstarter.constants.Roles;
-import com.springbaseproject.sharedstarter.entities.Account;
+import com.springbaseproject.sharedstarter.entities.AccountEntity;
 import net.datafaker.Faker;
 
 public class AccountTestDataFactory {
 
     private static final Faker faker = new Faker();
 
-    public static Account randomAccount() {
-        return Account.builder()
+    public static AccountEntity randomAccount() {
+        return AccountEntity.builder()
                 .id(faker.number().randomNumber())
                 .username(faker.credentials().username())
                 .email(faker.internet().emailAddress())

@@ -1,8 +1,10 @@
 package com.springbaseproject.accountservice.fixtures;
 
 import com.springbaseproject.accountservice.common.dtos.AccountResponseDto;
+import com.springbaseproject.accountservice.common.dtos.CreateAccountDto;
+import com.springbaseproject.accountservice.mappers.impl.AccountMapperImpl;
 import com.springbaseproject.sharedstarter.constants.Roles;
-import com.springbaseproject.sharedstarter.entities.Account;
+import com.springbaseproject.sharedstarter.entities.AccountEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,34 +12,60 @@ import java.util.Optional;
 
 public class AccountFixtures {
 
-    public static List<Account> getEmptyAccountsList() {
+    static AccountMapperImpl accountMapper = new AccountMapperImpl();
+
+    public static List<AccountEntity> getEmptyAccountsList() {
         return new ArrayList<>();
     }
 
-    public static Account adminAccount() {
-        return Account.builder()
+    public static AccountEntity adminAccount() {
+        return AccountEntity.builder()
+                .id(1L)
                 .username("admin@email.com")
-                .email("admin@email.com")
-                .password("<PASSWORD>")
                 .firstName("Steve")
                 .lastName("Rogers")
+                .email("admin@email.com")
+                .password("<PASSWORD>")
                 .role(Roles.ADMIN)
                 .build();
     }
 
-    public static Account managerAccount() {
-        return Account.builder()
+    public static AccountEntity managerAccount() {
+        return AccountEntity.builder()
+                .id(2L)
                 .username("manager@email.com")
-                .email("manager@email.com")
-                .password("<PASSWORD>")
                 .firstName("Black")
                 .lastName("Widow")
+                .email("manager@email.com")
+                .password("<PASSWORD>")
                 .role(Roles.MANAGER)
                 .build();
     }
 
-    public static Optional<Account> accountOptional() {
-        return Optional.of(Account.builder()
+    public static CreateAccountDto createAdminAccountDto() {
+        return CreateAccountDto.builder()
+                .username("admin@email.com")
+                .firstName("Steve")
+                .lastName("Rogers")
+                .email("admin@email.com")
+                .password("<PASSWORD>")
+                .role(Roles.ADMIN)
+                .build();
+    }
+
+    public static CreateAccountDto createManagerAccountDto() {
+        return CreateAccountDto.builder()
+                .username("manager@email.com")
+                .firstName("Black")
+                .lastName("Widow")
+                .email("manager@email.com")
+                .password("<PASSWORD>")
+                .role(Roles.MANAGER)
+                .build();
+    }
+
+    public static Optional<AccountEntity> accountOptional() {
+        return Optional.of(AccountEntity.builder()
                 .username("admin@email.com")
                 .email("admin@email.com")
                 .password("<PASSWORD>")
@@ -59,8 +87,8 @@ public class AccountFixtures {
                 .build();
     }
 
-    public static List<Account> getTwoAccounts() {
-        List<Account> accounts = new ArrayList<>();
+    public static List<AccountEntity> getTwoAccounts() {
+        List<AccountEntity> accounts = new ArrayList<>();
 
         accounts.add(AccountFixtures.adminAccount());
         accounts.add(AccountFixtures.managerAccount());
