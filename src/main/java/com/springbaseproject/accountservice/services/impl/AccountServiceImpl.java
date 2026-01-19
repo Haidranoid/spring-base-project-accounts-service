@@ -66,6 +66,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void delete(Long userId) {
+        //TODO: modify to use custom exception
         var account = accountRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 

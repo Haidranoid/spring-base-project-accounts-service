@@ -3,7 +3,8 @@ package com.springbaseproject.accountservice.web.controllers;
 import com.springbaseproject.accountservice.controllers.advices.GlobalExceptionHandler;
 import com.springbaseproject.accountservice.controllers.publics.AccountController;
 import com.springbaseproject.accountservice.controllers.publics.advices.AccountExceptionHandler;
-import com.springbaseproject.accountservice.fixtures.AccountFixtures;
+import com.springbaseproject.accountservice.fixtures.AccountDtoFixtures;
+import com.springbaseproject.accountservice.fixtures.AccountEntityFixtures;
 import com.springbaseproject.accountservice.services.impl.AccountServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ public class AccountControllerTest {
     @DisplayName("GET /accounts/{id} returns 200 when account exists")
     public void getAccountById_whenExists_shouldReturn200() {
         // Arrange
-        var accountDto = AccountFixtures.accountResponseDtoOne();
+        var accountDto = AccountDtoFixtures.adminAccountResponseDto(1L);
         when(accountService.findById(1L))
                 .thenReturn(accountDto);
 

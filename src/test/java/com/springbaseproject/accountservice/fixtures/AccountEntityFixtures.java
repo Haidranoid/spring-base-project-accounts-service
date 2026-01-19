@@ -2,7 +2,6 @@ package com.springbaseproject.accountservice.fixtures;
 
 import com.springbaseproject.accountservice.common.dtos.AccountResponseDto;
 import com.springbaseproject.accountservice.common.dtos.CreateAccountDto;
-import com.springbaseproject.accountservice.mappers.impl.AccountMapperImpl;
 import com.springbaseproject.sharedstarter.constants.Roles;
 import com.springbaseproject.sharedstarter.entities.AccountEntity;
 
@@ -10,18 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AccountFixtures {
+public class AccountEntityFixtures {
 
-    static AccountMapperImpl accountMapper = new AccountMapperImpl();
-
-    public static List<AccountEntity> getEmptyAccountsList() {
+    public static List<AccountEntity> emptyAccountsList() {
         return new ArrayList<>();
     }
 
     public static AccountEntity adminAccount() {
         return AccountEntity.builder()
-                .id(1L)
-                .username("admin@email.com")
+                .username("admin")
                 .firstName("Steve")
                 .lastName("Rogers")
                 .email("admin@email.com")
@@ -32,8 +28,7 @@ public class AccountFixtures {
 
     public static AccountEntity managerAccount() {
         return AccountEntity.builder()
-                .id(2L)
-                .username("manager@email.com")
+                .username("manager")
                 .firstName("Black")
                 .lastName("Widow")
                 .email("manager@email.com")
@@ -42,31 +37,35 @@ public class AccountFixtures {
                 .build();
     }
 
-    public static CreateAccountDto createAdminAccountDto() {
-        return CreateAccountDto.builder()
-                .username("admin@email.com")
+    public static AccountEntity adminAccountPersisted(Long id) {
+        return AccountEntity.builder()
+                .id(id)
+                .username("admin")
                 .firstName("Steve")
                 .lastName("Rogers")
                 .email("admin@email.com")
                 .password("<PASSWORD>")
                 .role(Roles.ADMIN)
+                .enabled(true)
                 .build();
     }
 
-    public static CreateAccountDto createManagerAccountDto() {
-        return CreateAccountDto.builder()
-                .username("manager@email.com")
+    public static AccountEntity managerAccountPersisted(Long id) {
+        return AccountEntity.builder()
+                .id(id)
+                .username("manager")
                 .firstName("Black")
                 .lastName("Widow")
                 .email("manager@email.com")
                 .password("<PASSWORD>")
                 .role(Roles.MANAGER)
+                .enabled(true)
                 .build();
     }
 
     public static Optional<AccountEntity> accountOptional() {
         return Optional.of(AccountEntity.builder()
-                .username("admin@email.com")
+                .username("admin")
                 .email("admin@email.com")
                 .password("<PASSWORD>")
                 .firstName("Steve")
@@ -76,36 +75,12 @@ public class AccountFixtures {
         );
     }
 
-    public static AccountResponseDto accountResponseDtoOne() {
-        return AccountResponseDto.builder()
-                .id(1L)
-                .username("admin@email.com")
-                .email("admin@email.com")
-                .firstName("Steve")
-                .lastName("Rogers")
-                .role(Roles.ADMIN)
-                .build();
-    }
-
-    public static List<AccountEntity> getTwoAccounts() {
+    public static List<AccountEntity> twoAccountsPersisted() {
         List<AccountEntity> accounts = new ArrayList<>();
 
-        accounts.add(AccountFixtures.adminAccount());
-        accounts.add(AccountFixtures.managerAccount());
+        accounts.add(AccountEntityFixtures.adminAccountPersisted(1L));
+        accounts.add(AccountEntityFixtures.managerAccountPersisted(2L));
 
         return accounts;
-    }
-
-    public static AccountResponseDto getAccountResponseDto() {
-        return AccountFixtures.accountResponseDtoOne();
-    }
-
-    public static List<AccountResponseDto> getTwoAccountResponseDto() {
-        List<AccountResponseDto> accountsDto = new ArrayList<>();
-
-        accountsDto.add(AccountFixtures.accountResponseDtoOne());
-        accountsDto.add(AccountFixtures.accountResponseDtoOne());
-
-        return accountsDto;
     }
 }

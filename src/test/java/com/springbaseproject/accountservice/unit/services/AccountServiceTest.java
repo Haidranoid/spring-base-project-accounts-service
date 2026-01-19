@@ -1,8 +1,8 @@
 package com.springbaseproject.accountservice.unit.services;
 
-import com.springbaseproject.accountservice.mappers.AccountMapper;
+import com.springbaseproject.accountservice.fixtures.AccountDtoFixtures;
 import com.springbaseproject.accountservice.mappers.impl.AccountMapperImpl;
-import com.springbaseproject.accountservice.fixtures.AccountFixtures;
+import com.springbaseproject.accountservice.fixtures.AccountEntityFixtures;
 import com.springbaseproject.accountservice.repositories.AccountRepository;
 import com.springbaseproject.accountservice.services.impl.AccountServiceImpl;
 import com.springbaseproject.sharedstarter.utils.SecurityUtils;
@@ -13,9 +13,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,8 +36,10 @@ public class AccountServiceTest {
     @Test
     void findAll_whenNoAccounts_shouldReturnAnEmptyList() {
         // Arrange
+        var emptyAccountList = AccountEntityFixtures.emptyAccountsList();
+
         when(accountRepository.findAll())
-                .thenReturn(AccountFixtures.getEmptyAccountsList());
+                .thenReturn(emptyAccountList);
 
         // Act
         var accounts = accountService.findAll();
@@ -49,73 +51,107 @@ public class AccountServiceTest {
 
     @Test
     void findAll_whenAccountsAreEqualToTwo_shouldReturnTwoAccountResponseDto() {
-        var mockedAccounts = AccountFixtures.getTwoAccounts();
+        var accountsPersisted = AccountEntityFixtures.twoAccountsPersisted();
+
         when(accountRepository.findAll())
-                .thenReturn(mockedAccounts);
+                .thenReturn(accountsPersisted);
+        when(accountMapper.toDto(accountsPersisted.get(0)))
+                .thenReturn(AccountDtoFixtures.adminAccountResponseDto(1L));
+        when(accountMapper.toDto(accountsPersisted.get(1)))
+                .thenReturn(AccountDtoFixtures.adminAccountResponseDto(2L));
+        /*
         mockedAccounts.forEach(account -> {
             when(accountMapper.toDto(account))
-                    .thenReturn(AccountFixtures.getAccountResponseDto());
+                    .thenReturn(AccountDtoFixtures.adminAccountResponseDto(1L));
         });
+        */
 
         var accounts = accountService.findAll();
 
-        assertNotNull(accounts.getFirst());
         assertEquals(2, accounts.size());
+        assertEquals(1L, accounts.get(0).id());
+        assertEquals(2L, accounts.get(1).id());
     }
 
     @Test
     void findById_whenAccountExists_shouldReturnAccountResponseDto() {
+        var accountPersisted = AccountEntityFixtures.adminAccountPersisted(1L);
+        var accountDto = AccountDtoFixtures.adminAccountResponseDto(1L);
+
         when(accountRepository.findById(1L))
-                .thenReturn(AccountFixtures.accountOptional());
-        when(accountMapper.toDto(any()))
-                .thenReturn(AccountFixtures.getAccountResponseDto());
+                .thenReturn(Optional.of(accountPersisted));
+        when(accountMapper.toDto(accountPersisted))
+                .thenReturn(accountDto);
 
-        var account = accountService.findById(1L);
+        var accountFound = accountService.findById(1L);
 
-        assertNotNull(account);
+        assertEquals(1L, accountFound.id());
+        assertEquals("admin", accountFound.username());
+
     }
 
 
     @Test
     void create_whenAccountIsPersisted_shouldReturnAccountResponseDto() {
-        var adminAccountFixture = AccountFixtures.adminAccount();
+        var createAccountDto = AccountDtoFixtures.createAdminAccountDto();
+        var accountEntity = AccountEntityFixtures.adminAccount();
+        var accountPersisted = AccountEntityFixtures.adminAccountPersisted(1L);
+        var accountDto = AccountDtoFixtures.adminAccountResponseDto(1L);
 
-        when(accountRepository.save(any()))
-                .thenReturn(adminAccountFixture);
-        when(accountMapper.toDto(adminAccountFixture))
-                .thenReturn(AccountFixtures.getAccountResponseDto());
+        when(accountMapper.toEntity(createAccountDto))
+                .thenReturn(accountEntity);
+        when(accountRepository.save(accountEntity))
+                .thenReturn(accountPersisted);
+        when(accountMapper.toDto(accountPersisted))
+                .thenReturn(accountDto);
 
-        var account = accountService.create(any());
+        var accountCreated = accountService.create(createAccountDto);
 
-        assertNotNull(account);
+        assertNotNull(accountCreated);
+        verify(accountMapper).toEntity(createAccountDto);
+        verify(accountRepository).save(accountEntity);
+        verify(accountMapper).toDto(accountPersisted);
     }
 
     @Test
     void update_whenAccountIsUpdated_shouldReturnAccountResponseDto() {
-        var accountOptionalFixture = AccountFixtures.accountOptional();
-        var adminAccountFixture = AccountFixtures.adminAccount();
+        var updateAccountDto = AccountDtoFixtures.updateAccountDtoOne();
+        var accountPersisted = AccountEntityFixtures.adminAccountPersisted(1L);
+        var accountUpdated = AccountEntityFixtures.adminAccountPersisted(1L);
 
         when(accountRepository.findById(1L))
-                .thenReturn(accountOptionalFixture);
-        when(accountRepository.save(accountOptionalFixture.get()))
-                .thenReturn(adminAccountFixture);
-        when(accountMapper.toDto(any()))
-                .thenReturn(AccountFixtures.accountResponseDtoOne());
+                .thenReturn(Optional.of(accountPersisted));
+        when(accountRepository.save(accountPersisted))
+                .thenReturn(accountUpdated);
+        when(accountMapper.toDto(accountUpdated))
+                .thenReturn(AccountDtoFixtures.adminAccountResponseDto(1L));
 
-        var account = accountService.update(1L, any());
+        var account = accountService.update(1L, updateAccountDto);
 
-        assertNotNull(account);
+        assertEquals(1L, account.id());
+        assertEquals("admin", account.username());
     }
 
     @Test
     void delete_whenAccountIsRemoved_shouldReturnNull() {
-        var accountOptionalFixture = AccountFixtures.accountOptional();
+        var accountPersisted = AccountEntityFixtures.adminAccountPersisted(1L);
 
         when(accountRepository.findById(1L))
-                .thenReturn(accountOptionalFixture);
+                .thenReturn(Optional.of(accountPersisted));
 
         accountService.delete(1L);
 
-        verify(accountRepository, times(1)).delete(accountOptionalFixture.get());
+        verify(accountRepository, times(1)).delete(accountPersisted);
     }
+
+    @Test
+    void delete_whenAccountDoesNotExist_shouldThrowException() {
+        when(accountRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        //TODO: modify service to use custom exception
+        assertThrows(RuntimeException.class,
+                () -> accountService.delete(1L));
+    }
+
 }

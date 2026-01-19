@@ -1,6 +1,6 @@
 package com.springbaseproject.accountservice.integration.repositories;
 
-import com.springbaseproject.accountservice.fixtures.AccountFixtures;
+import com.springbaseproject.accountservice.fixtures.AccountEntityFixtures;
 import com.springbaseproject.accountservice.integration.base.AbstractPostgresIT;
 import com.springbaseproject.accountservice.repositories.AccountRepository;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ public class AccountRepositoryIT extends AbstractPostgresIT {
 
     @Test
     void findAccountByEmail_shouldReturnAccount(){
-        var adminAccountFixture = AccountFixtures.adminAccount();
+        var adminAccountFixture = AccountEntityFixtures.adminAccount();
         accountRepository.save(adminAccountFixture);
 
         var accountFound = accountRepository.findByEmail(adminAccountFixture.getEmail());
@@ -29,7 +29,7 @@ public class AccountRepositoryIT extends AbstractPostgresIT {
 
     @Test
     void save_shouldPersistEntity(){
-        var account = AccountFixtures.adminAccount();
+        var account = AccountEntityFixtures.adminAccount();
         accountRepository.save(account);
 
         var accounts = accountRepository.findAll();

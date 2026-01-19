@@ -1,8 +1,10 @@
 package com.springbaseproject.accountservice.common.dtos;
 
 import com.springbaseproject.sharedstarter.constants.Roles;
+import lombok.Builder;
 import lombok.NonNull;
 
+@Builder
 public record UpdateAccountDto(
         @NonNull String firstName,
         @NonNull String lastName,

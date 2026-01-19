@@ -1,8 +1,6 @@
 package com.springbaseproject.accountservice.data.repositories;
 
-import com.springbaseproject.accountservice.fixtures.AccountFixtures;
-import com.springbaseproject.accountservice.mappers.AccountMapper;
-import com.springbaseproject.accountservice.mappers.impl.AccountMapperImpl;
+import com.springbaseproject.accountservice.fixtures.AccountEntityFixtures;
 import com.springbaseproject.accountservice.repositories.AccountRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,26 +12,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 public class AccountRepositoryTest {
 
-    AccountMapper accountMapper = new AccountMapperImpl();
-
     @Autowired
     AccountRepository accountRepository;
 
     @Test
-    void save_shouldPersistOneAccount(){
-        var createAdminAccountDtoFixture = AccountFixtures.createAdminAccountDto();
+    void save_shouldPersistOneAccount() {
+        var accountEntity = AccountEntityFixtures.adminAccount();
 
-        accountRepository.save(accountMapper.toEntity(createAdminAccountDtoFixture));
+        accountRepository.save(accountEntity);
         var accounts = accountRepository.findAll();
 
         assertThat(accounts).hasSize(1);
     }
 
     @Test
-    void delete_shouldPersistAndRemoveOneAccount(){
-        var createAdminAccountDtoFixture = AccountFixtures.createAdminAccountDto();
+    void delete_shouldPersistAndRemoveOneAccount() {
+        var accountEntity = AccountEntityFixtures.adminAccount();
 
-        var accountSaved = accountRepository.save(accountMapper.toEntity(createAdminAccountDtoFixture));
+        var accountSaved = accountRepository.save(accountEntity);
         var accounts = accountRepository.findAll();
 
         assertThat(accounts).hasSize(1);
@@ -46,42 +42,42 @@ public class AccountRepositoryTest {
     }
 
     @Test
-    void findById_shouldReturnAccount(){
-        var createAdminAccountDtoFixture = AccountFixtures.createAdminAccountDto();
+    void findById_shouldReturnAccount() {
+        var accountEntity = AccountEntityFixtures.adminAccount();
 
-        var accountSaved = accountRepository.save(accountMapper.toEntity(createAdminAccountDtoFixture));
+        var accountSaved = accountRepository.save(accountEntity);
         var account = accountRepository.findById(accountSaved.getId());
 
         assertThat(account).isPresent();
     }
 
     @Test
-    void findByUsername_shouldReturnAccount(){
-        var createAdminAccountDtoFixture = AccountFixtures.createAdminAccountDto();
+    void findByUsername_shouldReturnAccount() {
+        var accountEntity = AccountEntityFixtures.adminAccount();
 
-        accountRepository.save(accountMapper.toEntity(createAdminAccountDtoFixture));
-        var account = accountRepository.findByUsername(createAdminAccountDtoFixture.username());
-
-        assertThat(account).isPresent();
-    }
-
-    @Test
-    void findByEmail_shouldReturnAccount(){
-        var createAdminAccountDtoFixture = AccountFixtures.createAdminAccountDto();
-
-        accountRepository.save(accountMapper.toEntity(createAdminAccountDtoFixture));
-        var account = accountRepository.findByEmail(createAdminAccountDtoFixture.email());
+        accountRepository.save(accountEntity);
+        var account = accountRepository.findByUsername(accountEntity.getUsername());
 
         assertThat(account).isPresent();
     }
 
     @Test
-    void findByAll_shouldReturnTwoAccounts(){
-        var createAdminAccountDtoFixture = AccountFixtures.createAdminAccountDto();
-        var createManagerAccountDtoFixture = AccountFixtures.createManagerAccountDto();
+    void findByEmail_shouldReturnAccount() {
+        var accountEntity = AccountEntityFixtures.adminAccount();
 
-        accountRepository.save(accountMapper.toEntity(createAdminAccountDtoFixture));
-        accountRepository.save(accountMapper.toEntity(createManagerAccountDtoFixture));
+        accountRepository.save(accountEntity);
+        var account = accountRepository.findByEmail(accountEntity.getEmail());
+
+        assertThat(account).isPresent();
+    }
+
+    @Test
+    void findByAll_shouldReturnTwoAccounts() {
+        var accountEntity = AccountEntityFixtures.adminAccount();
+        var managerAccountFixture = AccountEntityFixtures.managerAccount();
+
+        accountRepository.save(accountEntity);
+        accountRepository.save(managerAccountFixture);
 
         var accounts = accountRepository.findAll();
 
