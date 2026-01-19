@@ -8,6 +8,7 @@ import com.springbaseproject.accountservice.services.impl.AccountServiceImpl;
 import com.springbaseproject.sharedstarter.utils.SecurityUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -87,7 +88,6 @@ public class AccountServiceTest {
 
         assertEquals(1L, accountFound.id());
         assertEquals("admin", accountFound.username());
-
     }
 
 
@@ -134,6 +134,8 @@ public class AccountServiceTest {
 
     @Test
     void delete_whenAccountIsRemoved_shouldReturnNull() {
+        InOrder inOrder = inOrder(accountRepository);
+
         var accountPersisted = AccountEntityFixtures.adminAccountPersisted(1L);
 
         when(accountRepository.findById(1L))
@@ -141,7 +143,8 @@ public class AccountServiceTest {
 
         accountService.delete(1L);
 
-        verify(accountRepository, times(1)).delete(accountPersisted);
+        inOrder.verify(accountRepository).findById(1L);
+        inOrder.verify(accountRepository, times(1)).delete(accountPersisted);
     }
 
     @Test
@@ -150,8 +153,10 @@ public class AccountServiceTest {
                 .thenReturn(Optional.empty());
 
         //TODO: modify service to use custom exception
-        assertThrows(RuntimeException.class,
-                () -> accountService.delete(1L));
+        var exception = assertThrows(RuntimeException.class, () -> accountService.delete(1L));
+
+        assertEquals("Account not found", exception.getMessage());
+        verify(accountRepository, never()).delete(any());
     }
 
 }
