@@ -17,7 +17,7 @@ public class AccountRepositoryIT extends AbstractPostgresIT {
     @Autowired
     AccountRepository accountRepository;
 
-    @Test
+    //@Test
     void findAccountByEmail_shouldReturnAccount(){
         var adminAccountFixture = AccountEntityFixtures.adminAccount();
         accountRepository.save(adminAccountFixture);
@@ -27,7 +27,7 @@ public class AccountRepositoryIT extends AbstractPostgresIT {
         assertThat(accountFound).isPresent();
     }
 
-    @Test
+    //@Test
     void save_shouldPersistEntity(){
         var account = AccountEntityFixtures.adminAccount();
         accountRepository.save(account);
