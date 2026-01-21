@@ -12,6 +12,7 @@ import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -90,9 +91,20 @@ public class AccountServiceTest {
         assertEquals("admin", accountFound.username());
     }
 
+    @Test
+    void findById_whenAccountDoesNotExists_shouldThrowException() {
+        when(accountRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        var exception = assertThrows(UsernameNotFoundException.class,
+                () -> accountService.findById(1L));
+
+        assertEquals("Account not found", exception.getMessage());
+        verify(accountMapper,never()).toDto(any());
+    }
 
     @Test
-    void create_whenAccountIsPersisted_shouldReturnAccountResponseDto() {
+    void create_whenAccountIsCreated_shouldReturnAccountResponseDto() {
         var createAccountDto = AccountDtoFixtures.createAdminAccountDto();
         var accountEntity = AccountEntityFixtures.adminAccount();
         var accountPersisted = AccountEntityFixtures.adminAccountPersisted(1L);
@@ -114,7 +126,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    void update_whenAccountIsUpdated_shouldReturnAccountResponseDto() {
+    void update_whenAccountExists_shouldBeUpdatedAndReturnAccountResponseDto() {
         var updateAccountDto = AccountDtoFixtures.updateAccountDtoOne();
         var accountPersisted = AccountEntityFixtures.adminAccountPersisted(1L);
         var accountUpdated = AccountEntityFixtures.adminAccountPersisted(1L);
@@ -133,7 +145,22 @@ public class AccountServiceTest {
     }
 
     @Test
-    void delete_whenAccountIsRemoved_shouldReturnNull() {
+    void update_whenAccountDoesNotExists_shouldThrowException() {
+        var updateAccountDto = AccountDtoFixtures.updateAccountDtoOne();
+
+        when(accountRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        var exception = assertThrows(UsernameNotFoundException.class,
+                () -> accountService.update(1L, updateAccountDto));
+
+        assertEquals("Account not found", exception.getMessage());
+        verify(accountRepository,never()).save(any());
+        verify(accountMapper,never()).toDto(any());
+    }
+
+    @Test
+    void delete_whenAccountExists_shouldReturnNull() {
         InOrder inOrder = inOrder(accountRepository);
 
         var accountPersisted = AccountEntityFixtures.adminAccountPersisted(1L);
@@ -157,6 +184,37 @@ public class AccountServiceTest {
 
         assertEquals("Account not found", exception.getMessage());
         verify(accountRepository, never()).delete(any());
+    }
+
+    @Test
+    void authenticateAccount_whenAccountExists_shouldReturnAccountResponseDto() {
+        var authenticateAccountDto = AccountDtoFixtures.authenticateAdminAccountDto();
+        var accountPersisted = AccountEntityFixtures.adminAccountPersisted(1L);
+        var accountDto = AccountDtoFixtures.adminAccountResponseDto(1L);
+
+        when(accountRepository.findByUsername(authenticateAccountDto.username()))
+                .thenReturn(Optional.of(accountPersisted));
+        when(accountMapper.toDto(accountPersisted))
+                .thenReturn(accountDto);
+
+        var accountFound = accountService.authenticateAccount(authenticateAccountDto);
+
+        assertEquals(1L, accountFound.id());
+        assertEquals("admin", accountFound.username());
+    }
+
+    @Test
+    void authenticateAccount_whenAccountDoesNot_shouldThrowException() {
+        var authenticateAccountDto = AccountDtoFixtures.authenticateAdminAccountDto();
+
+        when(accountRepository.findByUsername(authenticateAccountDto.username()))
+                .thenReturn(Optional.empty());
+
+        var exception = assertThrows(UsernameNotFoundException.class,
+                () -> accountService.authenticateAccount(authenticateAccountDto));
+
+        assertEquals("Username not found", exception.getMessage());
+        verify(accountMapper, never()).toDto(any());
     }
 
 }

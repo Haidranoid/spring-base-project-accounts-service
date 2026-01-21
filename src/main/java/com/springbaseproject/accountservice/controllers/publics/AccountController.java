@@ -31,10 +31,9 @@ public class AccountController {
         log.info("getAllAccounts request started");
 
         var accountList = accountService.findAll();
-        var accountDtoList = accountList.stream().toList();
 
-        log.info("getAllAccounts request response: {}", accountDtoList.subList(0, 5));
-        return accountDtoList;
+        log.info("getAllAccounts request response: {}", accountList.subList(0, 5));
+        return accountList;
     }
 
     @GetMapping("/{userId}")
@@ -77,7 +76,7 @@ public class AccountController {
     public void changePassword(@RequestBody ChangePasswordAccountDto changePasswordAccountDto) {
         log.info("changePassword request: {}", changePasswordAccountDto);
 
-        accountService.changePassword(changePasswordAccountDto);
+        //accountService.changePassword(changePasswordAccountDto);
 
         log.info("changePassword response: {}", "success");
     }

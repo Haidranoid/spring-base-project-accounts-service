@@ -1,6 +1,7 @@
 package com.springbaseproject.accountservice.fixtures;
 
 import com.springbaseproject.accountservice.common.dtos.AccountResponseDto;
+import com.springbaseproject.accountservice.common.dtos.AuthenticateAccountDto;
 import com.springbaseproject.accountservice.common.dtos.CreateAccountDto;
 import com.springbaseproject.accountservice.common.dtos.UpdateAccountDto;
 import com.springbaseproject.sharedstarter.constants.Roles;
@@ -52,6 +53,13 @@ public class AccountDtoFixtures {
                 .email("manager@email.com")
                 .password("<PASSWORD>")
                 .role(Roles.ADMIN)
+                .build();
+    }
+
+    public static AuthenticateAccountDto authenticateAdminAccountDto() {
+        return AuthenticateAccountDto.builder()
+                .username("admin")
+                .password("<PASSWORD>")
                 .build();
     }
 

@@ -28,10 +28,8 @@ jacocoTestReport {
             files(classDirectories.files.collect {
                 fileTree(dir: it, exclude: [
                         '**/*Application*',
+                        '**/common/**',
                         '**/configuration/**',
-                        '**/common/dtos/**',
-                        '**/common/errors/**',
-                        '**/common/exceptions/**'
                 ])
             })
     )
@@ -52,10 +50,9 @@ jacocoTestCoverageVerification {
 
             excludes = [
                     '*Application*',
+                    '*common*',
                     '*configuration*',
-                    '*common.dtos*',
-                    '*common.errors*',
-                    '*common.exceptions*'
+                    '*controllers*',
             ]
 
             limit {

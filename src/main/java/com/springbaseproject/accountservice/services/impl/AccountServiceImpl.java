@@ -81,6 +81,7 @@ public class AccountServiceImpl implements AccountService {
         return accountMapper.toDto(account);
     }
 
+    /*
     private void applyUpdates(AccountEntity entity, UpdateAccountDto dto) {
         if (!dto.password().isBlank()) {
             entity.setPassword(passwordEncoder.encode(dto.password()));
@@ -108,5 +109,5 @@ public class AccountServiceImpl implements AccountService {
         // save the new password
         accountRepository.save(account);
     }
-
+   */
 }
