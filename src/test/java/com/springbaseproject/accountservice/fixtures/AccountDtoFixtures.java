@@ -8,10 +8,15 @@ import com.springbaseproject.sharedstarter.constants.Roles;
 import com.springbaseproject.sharedstarter.entities.AccountEntity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 public class AccountDtoFixtures {
+
+    public static List<AccountResponseDto> emptyAccountResponseDtoList(){
+        return Collections.emptyList();
+    }
 
     public static AccountResponseDto adminAccountResponseDto(Long id) {
         return AccountResponseDto.builder()

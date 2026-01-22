@@ -32,7 +32,7 @@ public class AccountController {
 
         var accountList = accountService.findAll();
 
-        log.info("getAllAccounts request response: {}", accountList.subList(0, 5));
+        log.info("getAllAccounts request response: [{}]", "...");
         return accountList;
     }
 

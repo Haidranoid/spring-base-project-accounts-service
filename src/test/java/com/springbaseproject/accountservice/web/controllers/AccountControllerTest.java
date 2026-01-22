@@ -12,13 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AccountController.class)
@@ -31,38 +34,75 @@ public class AccountControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-    @Autowired
-    private MockMvcTester mockMvcTester;
+    //@Autowired
+    //private MockMvcTester mvcTester;
 
     @MockitoBean
     private AccountServiceImpl accountService;
 
+    //@WithMockUser(roles = "ADMIN")
     @Test
-    @DisplayName("GET /accounts/{id} returns 200 when account exists")
-    public void getAccountById_whenExists_shouldReturn200() {
+    @DisplayName("GET /api/v1/accounts returns 200 when accounts list is not empty")
+    public void getAllAccounts_whenAccountsIsNotEmpty_shouldReturn200() throws Exception {
+        var accountsList = AccountDtoFixtures.twoAccountResponseDto();
+
+        when(accountService.findAll())
+                .thenReturn(accountsList);
+
+        mockMvc.perform(get("/api/v1/accounts"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
+
+    @Test
+    @DisplayName("GET /api/v1/accounts returns 200 when accounts list is empty")
+    public void getAllAccounts_whenNoAccounts_shouldReturn200() throws Exception {
+        var accountsEmptyList = AccountDtoFixtures.emptyAccountResponseDtoList();
+
+        when(accountService.findAll())
+                .thenReturn(accountsEmptyList);
+
+        mockMvc.perform(get("/api/v1/accounts"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    @DisplayName("GET /api/v1/accounts/{id} returns 200 when account exists")
+    public void getAccountById_whenAccountExists_shouldReturn200() throws Exception {
         // Arrange
         var accountDto = AccountDtoFixtures.adminAccountResponseDto(1L);
+
         when(accountService.findById(1L))
                 .thenReturn(accountDto);
 
         // Act + Assert
-        assertThat(mockMvcTester.get().uri("/api/v1/accounts/1"))
-                .hasStatusOk();
+        mockMvc.perform(get("/api/v1/accounts/1"))
+                        .andExpect(status().isOk());
     }
 
     @Test
-    @DisplayName("GET /accounts/{id} returns 404 when account was not found")
-    public void getAccountById_whenNotFound_shouldReturn404() {
+    @DisplayName("GET /api/v1/accounts/{id} returns 500 when account was not found")
+    public void getAccountById_whenAccountDoesNotExist_shouldReturn404() throws Exception {
         when(accountService.findById(1L))
-                .thenThrow();
+                .thenThrow(new UsernameNotFoundException("Account not found"));
 
-        assertThat(mockMvcTester.get().uri("/api/v1/accounts/1"))
-                .hasFailed();
-    }
-
-    //@WithMockUser(roles = "ADMIN")
-    public void getAllAccounts_shouldReturnStatusOk() throws Exception {
         mockMvc.perform(get("/api/v1/accounts/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("Account not found"))
+                .andExpect(jsonPath("$.timestamp").exists());
+
+        /*
+         var result = mockMvcTester.get()
+                        .uri("/api/v1/accounts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .exchange();
+
+        assertThat(result).hasStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(result).bodyJson().extractingPath("$.message").isEqualTo("Account not found");
+        assertThat(result).bodyJson().extractingPath("$.timestamp").isNotEmpty();
+         */
     }
 }

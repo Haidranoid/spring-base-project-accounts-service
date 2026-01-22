@@ -14,12 +14,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SecurityIT {
 
     @Autowired
-    MockMvc mvc;
+    MockMvc mockMvc;
 
     @Test
     void unauthenticatedUser_shouldReceive401() throws Exception {
         //TODO: modify to receibe a 401
-        mvc.perform(get("/api/v1/accounts"))
+        mockMvc.perform(get("/api/v1/accounts"))
                 .andExpect(status().is5xxServerError());
     }
 }

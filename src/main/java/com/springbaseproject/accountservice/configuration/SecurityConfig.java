@@ -31,6 +31,7 @@ public class SecurityConfig {
             "/swagger-ui.html"
     };
 
+    //TODO: update this to publics and internal restrictions
     private static final String[] WHITE_LIST_URL = {
             "/actuator/**",
             "/api/v1/accounts",

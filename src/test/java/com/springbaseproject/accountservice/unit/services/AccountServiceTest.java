@@ -92,7 +92,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    void findById_whenAccountDoesNotExists_shouldThrowException() {
+    void findById_whenAccountDoesNotExist_shouldThrowException() {
         when(accountRepository.findById(1L))
                 .thenReturn(Optional.empty());
 
@@ -145,7 +145,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    void update_whenAccountDoesNotExists_shouldThrowException() {
+    void update_whenAccountDoesNotExist_shouldThrowException() {
         var updateAccountDto = AccountDtoFixtures.updateAccountDtoOne();
 
         when(accountRepository.findById(1L))
@@ -204,7 +204,7 @@ public class AccountServiceTest {
     }
 
     @Test
-    void authenticateAccount_whenAccountDoesNot_shouldThrowException() {
+    void authenticateAccount_whenAccountDoesNotExist_shouldThrowException() {
         var authenticateAccountDto = AccountDtoFixtures.authenticateAdminAccountDto();
 
         when(accountRepository.findByUsername(authenticateAccountDto.username()))
