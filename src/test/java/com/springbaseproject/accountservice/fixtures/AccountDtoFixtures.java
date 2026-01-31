@@ -37,6 +37,13 @@ public class AccountDtoFixtures {
                 .build();
     }
 
+    public static AuthenticateAccountDto authenticateAccountDto() {
+        return AuthenticateAccountDto.builder()
+                .username("admin")
+                .password("<PASSWORD>")
+                .build();
+    }
+
     public static CreateAccountDto createManagerAccountDto() {
         return CreateAccountDto.builder()
                 .username("manager")

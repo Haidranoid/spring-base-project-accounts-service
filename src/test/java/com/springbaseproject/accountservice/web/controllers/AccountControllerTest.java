@@ -2,10 +2,9 @@ package com.springbaseproject.accountservice.web.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springbaseproject.accountservice.controllers.advices.GlobalExceptionHandler;
-import com.springbaseproject.accountservice.controllers.publics.AccountController;
-import com.springbaseproject.accountservice.controllers.publics.advices.AccountExceptionHandler;
+import com.springbaseproject.accountservice.controllers.AccountController;
+import com.springbaseproject.accountservice.controllers.advices.AccountExceptionHandler;
 import com.springbaseproject.accountservice.fixtures.AccountDtoFixtures;
-import com.springbaseproject.accountservice.fixtures.AccountEntityFixtures;
 import com.springbaseproject.accountservice.services.impl.AccountServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;

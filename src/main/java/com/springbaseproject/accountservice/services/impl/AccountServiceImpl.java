@@ -46,6 +46,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountResponseDto create(CreateAccountDto createAccountDto) {
+        //TODO: handle the case when the account already exist
         var accountEntity = accountMapper.toEntity(createAccountDto);
         var accountSaved = accountRepository.save(accountEntity);
 

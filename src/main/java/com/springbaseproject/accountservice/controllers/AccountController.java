@@ -1,4 +1,4 @@
-package com.springbaseproject.accountservice.controllers.publics;
+package com.springbaseproject.accountservice.controllers;
 
 import com.springbaseproject.accountservice.common.dtos.AccountResponseDto;
 import com.springbaseproject.accountservice.common.dtos.ChangePasswordAccountDto;

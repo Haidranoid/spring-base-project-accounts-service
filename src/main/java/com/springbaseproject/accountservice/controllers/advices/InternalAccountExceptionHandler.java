@@ -1,7 +1,6 @@
-package com.springbaseproject.accountservice.controllers.internals.advices;
+package com.springbaseproject.accountservice.controllers.advices;
 
 import com.springbaseproject.accountservice.common.errors.ApiError;
-import com.springbaseproject.accountservice.common.exceptions.AccountNotFoundException;
 import com.springbaseproject.accountservice.common.exceptions.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
