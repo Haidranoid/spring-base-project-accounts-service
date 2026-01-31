@@ -73,6 +73,7 @@ public class AccountController {
 
 
     @PatchMapping("/change-password")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void changePassword(@RequestBody ChangePasswordAccountDto changePasswordAccountDto) {
         log.info("changePassword request: {}", changePasswordAccountDto);
 

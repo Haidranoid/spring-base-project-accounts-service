@@ -4,12 +4,12 @@ import com.springbaseproject.sharedstarter.constants.Roles;
 import lombok.Builder;
 import lombok.NonNull;
 
+//TODO: remove NonNull from update dtos
 @Builder
 public record UpdateAccountDto(
         @NonNull String firstName,
         @NonNull String lastName,
         @NonNull String email,
-        @NonNull String password,
         @NonNull Roles role
 ) {
     @NonNull
@@ -19,7 +19,6 @@ public record UpdateAccountDto(
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + "[password]" + '\'' +
                 ", role=" + role +
                 '}';
     }

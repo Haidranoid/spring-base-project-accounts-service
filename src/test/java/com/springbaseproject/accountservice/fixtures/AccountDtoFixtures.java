@@ -1,9 +1,6 @@
 package com.springbaseproject.accountservice.fixtures;
 
-import com.springbaseproject.accountservice.common.dtos.AccountResponseDto;
-import com.springbaseproject.accountservice.common.dtos.AuthenticateAccountDto;
-import com.springbaseproject.accountservice.common.dtos.CreateAccountDto;
-import com.springbaseproject.accountservice.common.dtos.UpdateAccountDto;
+import com.springbaseproject.accountservice.common.dtos.*;
 import com.springbaseproject.sharedstarter.constants.Roles;
 import com.springbaseproject.sharedstarter.entities.AccountEntity;
 
@@ -56,8 +53,27 @@ public class AccountDtoFixtures {
                 .firstName("Steve")
                 .lastName("Rogers")
                 .email("manager@email.com")
-                .password("<PASSWORD>")
+                //.password("<PASSWORD>")
                 .role(Roles.ADMIN)
+                .build();
+    }
+
+    public static AccountResponseDto updatedAccountDtoOne(Long id) {
+        return AccountResponseDto.builder()
+                .id(id)
+                .username("updatedAccount")
+                .firstName("Steve")
+                .lastName("Rogers")
+                .email("manager@email.com")
+                .role(Roles.ADMIN)
+                .build();
+    }
+
+    public static ChangePasswordAccountDto changePasswordAccountDto() {
+        return ChangePasswordAccountDto.builder()
+                .currentPassword("<PASSWORD>")
+                .confirmationPassword("<PASSWORD>")
+                .newPassword("<NEW-PASSWORD>")
                 .build();
     }
 

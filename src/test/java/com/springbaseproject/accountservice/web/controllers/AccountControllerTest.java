@@ -1,5 +1,6 @@
 package com.springbaseproject.accountservice.web.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springbaseproject.accountservice.controllers.advices.GlobalExceptionHandler;
 import com.springbaseproject.accountservice.controllers.publics.AccountController;
 import com.springbaseproject.accountservice.controllers.publics.advices.AccountExceptionHandler;
@@ -8,10 +9,12 @@ import com.springbaseproject.accountservice.fixtures.AccountEntityFixtures;
 import com.springbaseproject.accountservice.services.impl.AccountServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,8 +22,9 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,6 +40,8 @@ public class AccountControllerTest {
     private MockMvc mockMvc;
     //@Autowired
     //private MockMvcTester mvcTester;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockitoBean
     private AccountServiceImpl accountService;
@@ -104,5 +110,87 @@ public class AccountControllerTest {
         assertThat(result).bodyJson().extractingPath("$.message").isEqualTo("Account not found");
         assertThat(result).bodyJson().extractingPath("$.timestamp").isNotEmpty();
          */
+    }
+
+    @Test
+    @DisplayName("PATCH /api/v1/accounts/{userId} returns 200 when account exists")
+    public void updateAccount_whenAccountExists_shouldReturn200() throws Exception {
+        var updateAccountDto = AccountDtoFixtures.updateAccountDtoOne();
+        var updatedAccountDto = AccountDtoFixtures.updatedAccountDtoOne(1L);
+
+        when(accountService.update(1L, updateAccountDto))
+                .thenReturn(updatedAccountDto);
+
+        mockMvc.perform(
+                patch("/api/v1/accounts/{userId}",1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateAccountDto))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.username").value(updatedAccountDto.username()));
+    }
+
+    @Test
+    @DisplayName("PATCH /api/v1/accounts/{userId} returns 500 when account was not found")
+    public void updateAccount_whenAccountDoesNotExist_shouldReturn404() throws Exception {
+        var updateAccountDto = AccountDtoFixtures.updateAccountDtoOne();
+
+        when(accountService.update(1L, updateAccountDto))
+                .thenThrow(new UsernameNotFoundException("Account not found"));
+
+
+        mockMvc.perform(
+                        patch("/api/v1/accounts/{userId}",1L)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateAccountDto))
+                )
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("Account not found"))
+                .andExpect(jsonPath("$.timestamp").exists());
+    }
+
+    @Test
+    @DisplayName("DELETE /api/v1/accounts/{userId} returns 200 when account exists")
+    public void deleteAccount_whenAccountExists_shouldReturn200() throws Exception {
+        Mockito.doNothing()
+                .when(accountService).delete(1L);
+
+        mockMvc.perform(
+                        delete("/api/v1/accounts/{userId}",1L)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("DELETE /api/v1/accounts/{userId} returns 500 when account was not found")
+    public void deleteAccount_whenAccountDoesNotExist_shouldReturn404() throws Exception {
+        Mockito.doThrow(new RuntimeException("Account not found"))
+                .when(accountService)
+                .delete(1L);
+
+        mockMvc.perform(
+                        delete("/api/v1/accounts/{userId}",1L)
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("Account not found"))
+                .andExpect(jsonPath("$.timestamp").exists());
+    }
+
+    @Test
+    @DisplayName("PATCH /api/v1/accounts/change-password returns 200 when account exists")
+    public void changePassword_whenAccountExists_shouldReturn200() throws Exception {
+        var changePasswordDto = AccountDtoFixtures.changePasswordAccountDto();
+
+        mockMvc.perform(
+                patch("/api/v1/accounts/change-password")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(changePasswordDto))
+                )
+                .andExpect(status().isNoContent());
     }
 }

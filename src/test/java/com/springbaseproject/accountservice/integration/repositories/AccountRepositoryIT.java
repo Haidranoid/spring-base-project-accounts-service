@@ -1,9 +1,8 @@
 package com.springbaseproject.accountservice.integration.repositories;
 
 import com.springbaseproject.accountservice.fixtures.AccountEntityFixtures;
-import com.springbaseproject.accountservice.integration.base.AbstractPostgresIT;
+import com.springbaseproject.accountservice.containers.base.AbstractPostgresIT;
 import com.springbaseproject.accountservice.repositories.AccountRepository;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

@@ -1,4 +1,4 @@
-package com.springbaseproject.accountservice.integration.base;
+package com.springbaseproject.accountservice.containers.base;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
