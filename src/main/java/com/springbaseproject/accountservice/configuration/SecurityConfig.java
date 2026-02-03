@@ -34,8 +34,7 @@ public class SecurityConfig {
     //TODO: update this to publics and internal restrictions
     private static final String[] WHITE_LIST_URL = {
             "/actuator/**",
-            "/api/v1/accounts",
-            "/api/v1/accounts/authenticate-login",
+            "/api/v1/internal/accounts/**",
     };
 
     @Bean
