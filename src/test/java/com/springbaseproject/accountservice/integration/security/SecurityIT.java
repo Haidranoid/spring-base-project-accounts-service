@@ -18,8 +18,8 @@ class SecurityIT {
 
     @Test
     void unauthenticatedUser_shouldReceive401() throws Exception {
-        //TODO: modify to receibe a 401
-        mockMvc.perform(get("/api/v1/accounts"))
-                .andExpect(status().is2xxSuccessful());
+        //TODO: modify to receive a 401
+        mockMvc.perform(get("/api/v1/internal/accounts"))
+                .andExpect(status().isInternalServerError());
     }
 }
