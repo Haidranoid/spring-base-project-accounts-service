@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Tag(name = "Internal Account Controller", description = "Internal endpoints. Do NOT call directly from client applications.")
 //@RequestMapping("/api/v1/internal/accounts")
-@RequestMapping("/api/v1/accounts")
+@RequestMapping("/api/v1/internal/accounts")
 @RestController
 @RequiredArgsConstructor
 public class InternalAccountController {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice(basePackages = "com.springbaseproject.accountservice.controllers.publics")
+//@RestControllerAdvice(basePackages = "com.springbaseproject.accountservice.controllers.publics")
 public class AccountExceptionHandler {
 
     @ExceptionHandler(InvalidCredentialsException.class)

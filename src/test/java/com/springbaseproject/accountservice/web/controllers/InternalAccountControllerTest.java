@@ -49,7 +49,7 @@ public class InternalAccountControllerTest {
                 .thenReturn(accountCreated);
 
         mockMvc.perform(
-                        post("/api/v1/accounts")
+                        post("/api/v1/internal/accounts")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(createAccountDto))
@@ -70,7 +70,7 @@ public class InternalAccountControllerTest {
                 .thenReturn(accountAuthenticated);
 
         mockMvc.perform(
-                        post("/api/v1/accounts/authenticate-login")
+                        post("/api/v1/internal/accounts/authenticate-login")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(authenticateAccountDto))

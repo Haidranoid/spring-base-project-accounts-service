@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
-@RestControllerAdvice(basePackages = "com.springbaseproject.accountservice.controllers.internals")
+//@RestControllerAdvice(basePackages = "com.springbaseproject.accountservice.controllers.internals")
 public class InternalAccountExceptionHandler {
 
     @ExceptionHandler(InvalidCredentialsException.class)
