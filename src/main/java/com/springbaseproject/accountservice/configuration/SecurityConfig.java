@@ -37,6 +37,15 @@ public class SecurityConfig {
             "/api/v1/internal/accounts/**",
     };
 
+    /*
+    .authorizeHttpRequests(req ->
+    req
+        .requestMatchers("/api/v1/accounts/me").authenticated()
+        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+        .requestMatchers("/api/v1/manager/**").hasAuthority("SCOPE_manager:read")
+        .anyRequest().authenticated()
+)
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
@@ -59,7 +68,7 @@ public class SecurityConfig {
                                 oauth2.jwt(jwt -> jwt
                                         .decoder(decoder)
                                         .jwtAuthenticationConverter(converter)
-                ));
+                                ));
 
         return http.build();
     }

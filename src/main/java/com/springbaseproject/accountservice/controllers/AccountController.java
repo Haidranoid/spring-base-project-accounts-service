@@ -5,6 +5,7 @@ import com.springbaseproject.accountservice.common.dtos.ChangePasswordAccountDto
 import com.springbaseproject.accountservice.common.dtos.UpdateAccountDto;
 import com.springbaseproject.accountservice.services.impl.AccountServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 
 @Slf4j
@@ -25,6 +25,18 @@ public class AccountController {
 
     private final AccountServiceImpl accountService;
     private final Environment environment;
+
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @SecurityRequirement(name = "bearerAuth")
+    public AccountResponseDto getMe() {
+        log.info("getMe request started");
+
+        var currentSession = accountService.me();
+
+        log.info("getMe request response: {}", currentSession);
+        return currentSession;
+    }
 
     @GetMapping
     public List<AccountResponseDto> getAllAccounts() {

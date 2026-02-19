@@ -1,11 +1,10 @@
 package com.springbaseproject.accountservice.services.impl;
 
 import com.springbaseproject.accountservice.common.dtos.*;
+import com.springbaseproject.accountservice.common.exceptions.UnauthorizedException;
 import com.springbaseproject.accountservice.mappers.AccountMapper;
-import com.springbaseproject.accountservice.mappers.impl.AccountMapperImpl;
 import com.springbaseproject.accountservice.repositories.AccountRepository;
 import com.springbaseproject.accountservice.services.AccountService;
-import com.springbaseproject.sharedstarter.entities.AccountEntity;
 import com.springbaseproject.sharedstarter.utils.SecurityUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +26,19 @@ public class AccountServiceImpl implements AccountService {
     private final PasswordEncoder passwordEncoder;
     private final AccountMapper accountMapper;
     private final SecurityUtils securityUtils;
+
+    //@Override
+    public AccountResponseDto me() {
+        var username = securityUtils.getCurrentUsername();
+
+        if (username == null) {
+            throw new UnauthorizedException();
+        }
+
+        return accountRepository.findByUsername(username)
+                .map(accountMapper::toDto)
+                .orElseThrow(UnauthorizedException::new);
+    }
 
     @Override
     @Transactional(readOnly = true)
