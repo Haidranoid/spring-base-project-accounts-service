@@ -11,6 +11,18 @@ import java.util.Optional;
 
 public class AccountEntityFixtures {
 
+    public static AccountEntity currentSessionAccount(Long id) {
+        return AccountEntity.builder()
+                .id(id)
+                .username("ronald")
+                .firstName("Ronald")
+                .lastName("Flag")
+                .email("ronald@email.com")
+                .password("<PASSWORD>")
+                .role(Roles.USER)
+                .build();
+    }
+
     public static List<AccountEntity> emptyAccountsList() {
         return new ArrayList<>();
     }

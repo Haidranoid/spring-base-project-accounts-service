@@ -2,14 +2,34 @@ package com.springbaseproject.accountservice.fixtures;
 
 import com.springbaseproject.accountservice.common.dtos.*;
 import com.springbaseproject.sharedstarter.constants.Roles;
-import com.springbaseproject.sharedstarter.entities.AccountEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class AccountDtoFixtures {
+
+    public static AccountResponseDto meAccountResponseDto(Long id) {
+        return AccountResponseDto.builder()
+                .id(id)
+                .username("ronald")
+                .email("ronald@email.com")
+                .firstName("Ronald")
+                .lastName("Flag")
+                .role(Roles.USER)
+                .build();
+    }
+
+    public static AccountResponseDto currentSessionDto(Long id) {
+        return AccountResponseDto.builder()
+                .id(id)
+                .username("ronald")
+                .email("ronald@email.com")
+                .firstName("Ronald")
+                .lastName("Flag")
+                .role(Roles.USER)
+                .build();
+    }
 
     public static List<AccountResponseDto> emptyAccountResponseDtoList(){
         return Collections.emptyList();

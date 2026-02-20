@@ -1,11 +1,13 @@
 package com.springbaseproject.accountservice.unit.services;
 
+import com.springbaseproject.accountservice.common.exceptions.UnauthorizedException;
 import com.springbaseproject.accountservice.fixtures.AccountDtoFixtures;
 import com.springbaseproject.accountservice.mappers.impl.AccountMapperImpl;
 import com.springbaseproject.accountservice.fixtures.AccountEntityFixtures;
 import com.springbaseproject.accountservice.repositories.AccountRepository;
 import com.springbaseproject.accountservice.services.impl.AccountServiceImpl;
-import com.springbaseproject.sharedstarter.utils.SecurityUtils;
+import com.springbaseproject.sharedstarter.constants.Roles;
+import com.springbaseproject.sharedstarter.utils.SessionUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
@@ -30,10 +32,43 @@ public class AccountServiceTest {
     @Mock
     private AccountMapperImpl accountMapper;
     @Mock
-    private SecurityUtils securityUtils;
+    private SessionUtils sessionUtils;
 
     @InjectMocks
     private AccountServiceImpl accountService;
+
+    @Test
+    void me_whenThereIsASession_shouldReturnAuthAccountDto() {
+        var username = "ronald";
+        var currentSessionDto = AccountDtoFixtures.currentSessionDto(1L);
+        var currentSession = AccountEntityFixtures.currentSessionAccount(1L);
+
+        when(sessionUtils.getCurrentUsername())
+                .thenReturn(username);
+        when(accountRepository.findByUsername(username))
+                .thenReturn(Optional.of(currentSession));
+        when(accountMapper.toDto(currentSession))
+                .thenReturn(currentSessionDto);
+
+        var session = accountService.me();
+
+        assertNotNull(session);
+        assertEquals(1L, session.id());
+        assertEquals("ronald", session.username());
+        assertEquals("ronald@email.com", session.email());
+        assertEquals(Roles.USER, session.role());
+    }
+
+    @Test
+    void me_whenThereIsNotASession_shouldThrowException() {
+        when(sessionUtils.getCurrentUsername())
+                .thenReturn(null);
+
+        var exception = assertThrows(UnauthorizedException.class,
+                () -> accountService.me());
+
+        assertEquals(UnauthorizedException.class, exception.getClass());
+    }
 
     @Test
     void findAll_whenNoAccounts_shouldReturnAnEmptyList() {

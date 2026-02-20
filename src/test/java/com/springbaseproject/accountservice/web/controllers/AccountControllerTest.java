@@ -6,6 +6,7 @@ import com.springbaseproject.accountservice.controllers.AccountController;
 import com.springbaseproject.accountservice.controllers.advices.AccountExceptionHandler;
 import com.springbaseproject.accountservice.fixtures.AccountDtoFixtures;
 import com.springbaseproject.accountservice.services.impl.AccountServiceImpl;
+import com.springbaseproject.sharedstarter.constants.Roles;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -43,6 +44,21 @@ public class AccountControllerTest {
 
     @MockitoBean
     private AccountServiceImpl accountService;
+
+    @Test
+    @DisplayName("GET /api/v1/accounts/me returns 200 when there user has a session")
+    public void me_whenIsThereASessionActive_shouldReturn202() throws Exception {
+        var session = AccountDtoFixtures.meAccountResponseDto(1L);
+
+        when(accountService.me())
+                .thenReturn(session);
+
+        mockMvc.perform(get("/api/v1/accounts/me"))
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.username").value("ronald"))
+                .andExpect(jsonPath("$.role").value(Roles.USER.name()));
+    }
 
     //@WithMockUser(roles = "ADMIN")
     @Test

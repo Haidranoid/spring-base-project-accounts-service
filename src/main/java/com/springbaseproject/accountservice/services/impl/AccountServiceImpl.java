@@ -35,9 +35,10 @@ public class AccountServiceImpl implements AccountService {
             throw new UnauthorizedException();
         }
 
-        return accountRepository.findByUsername(username)
-                .map(accountMapper::toDto)
-                .orElseThrow(UnauthorizedException::new);
+        var account = accountRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Account not found"));
+
+        return accountMapper.toDto(account);
     }
 
     @Override
