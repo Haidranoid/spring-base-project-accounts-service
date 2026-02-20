@@ -5,8 +5,8 @@ import com.springbaseproject.accountservice.common.exceptions.UnauthorizedExcept
 import com.springbaseproject.accountservice.mappers.AccountMapper;
 import com.springbaseproject.accountservice.repositories.AccountRepository;
 import com.springbaseproject.accountservice.services.AccountService;
-import com.springbaseproject.sharedstarter.utils.SecurityUtils;
 
+import com.springbaseproject.sharedstarter.utils.SessionUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,11 +25,11 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountMapper accountMapper;
-    private final SecurityUtils securityUtils;
+    private final SessionUtils sessionUtils;
 
     //@Override
     public AccountResponseDto me() {
-        var username = securityUtils.getCurrentUsername();
+        var username = sessionUtils.getCurrentUsername();
 
         if (username == null) {
             throw new UnauthorizedException();
